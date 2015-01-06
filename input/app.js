@@ -1,23 +1,22 @@
 /* global $:false, slabs:false */
 'use strict';
 
-var authenticateWithFacebook = function() {
-  var token = '';
+var authorizedCall = false,
+    token          = '';
 
-  // @TODO: implement Facebook login
-
-  $('#accessToken').val(token);
+// @TODO: handle user authorization
+var authorizeAppWithFacebook = function() {
+  token = 'a_valid_token';
+  authorizedCall = true;
 };
 
 var compileObject = function() {
-  var accessToken = $('#accessToken').val();
-  var restQuery   = $('#restQuery').val();
-  var fqlQuery    = $('#fqlQuery').val();
+  var query = $('#query').val();
 
   var settings = {
-    token : accessToken,
-    rest  : restQuery,
-    fql   : fqlQuery
+    authorizedCall : authorizedCall,
+    token          : token,
+    query          : query
   };
 
   // Submit the data to the slabs core, this also triggers the close of the iFrame.

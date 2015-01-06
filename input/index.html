@@ -12,30 +12,34 @@
 </head>
 <body>
 
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : 'your_app_id',
+          xfbml      : true,
+          version    : 'v2.2'
+        });
+      };
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "//connect.facebook.net/en_US/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
+
     <div class="page-header">
         <h1>Facebook Graph API Slab<br/><small></small></h1>
     </div>
 
     <form role="form">
-        <div class="form-group">
-            <label for="accessToken">Access Token</label>
-            <input class="form-control" id="accessToken" placeholder="Paste your access token here">
-        </div>
-
-        <button type="button" class="btn btn-primary" id="authenticateWithFacebook" onclick="authenticateWithFacebook()">Authenticate</button>
-
-        <hr/>
+        <button type="button" class="btn btn-primary" onclick="authorizeAppWithFacebook()">Authorize with Facebook</button>        
 
         <div class="form-group">
-            <label for="restQuery">REST Query</label>
-            <input class="form-control" id="restQuery" value="me?fields=id,name">
-        </div>
-
-        <p>or</p>
-
-        <div class="form-group">
-            <label for="fqlQuery">FQL Query</label>
-            <textarea class="form-control" id="fqlQuery" placeholder="Deprecated after v2.1"></textarea>
+            <label for="query">Query</label>
+            <input class="form-control" id="query" value="zuck?fields=id,name" type="text">
         </div>
 
         <button type="button" class="btn btn-default" onclick="compileObject()">Done</button>

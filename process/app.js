@@ -2,37 +2,77 @@
 
 // Dependencies
 var Q       = require('q'),
-    request = require('request');
+    graph   = require('fbgraph');
 
 // Privates
-var apiHost    = 'https://graph.facebook.com',
-    apiVersion = 'v2.2',
-    fqlVersion = 'v2.1';
+var appId     = process.env.FB_GRAPH_SLAB_ID,
+    appSecret = process.env.FB_GRAPH_SLAB_SECRET;
+
+var extendAccessToken = function(appId, appSecret, token) {
+    var deferred = Q.defer();
+
+    graph.extendAccessToken({
+        "access_token"  : token,
+        "client_id"     : appId,
+        "client_secret" : appSecret
+    }, function (err, facebookRes) {
+        if(err) {
+            deferred.reject(err);
+        } else {
+            deferred.resolve();
+        }
+    });
+
+    return deferred.promise;
+}
 
 exports.getData = function(settings) {
     var deferred = Q.defer();
 
-    // Raise error is there is no access token
-    if (settings.token.length === 0) {
+    // Validate token length
+    if (settings.authorizedCall && settings.token.length === 0) {
         deferred.reject(new Error('Invalid access token'));
         return deferred.promise;
     }
 
-    // Raise error is REST query is empty AND no FQL query given either
-    if (settings.rest.length === 0 && settings.fql.length === 0) {
+    // Raise error if REST query is empty
+    if (settings.query.length === 0) {
         deferred.reject(new Error('No query given'));
         return deferred.promise;
     }
 
-    // Handle deprecated FQL queries
-    if (settings.fql.length !== 0) {
-        deferred.resolve([]);
+    // If user has not authorized the app make the request and let
+    // facebook reject the call
+    if (!settings.authorizedCall) {
+        graph.get(settings.query, function(err, res) {
+            if (err) {
+                deferred.reject(err);
+                return;
+            }
+            deferred.resolve(res);
+        });
+        return deferred.promise;
     }
 
-    // Handle REST query
-    if (settings.rest.length !== 0) {
-        deferred.resolve([]);
-    }
+    // If the user has authorized the app then extend token lifetime to 60 days
+    extendAccessToken(appId, appSecret, settings.token)
+        .then(function(facebookRes) {
+            console.log(facebookRes);
+
+            graph.setAppSecret(appSecret);
+            graph.setAccessToken(settings.token);
+
+            graph.get(settings.query, function(err, res) {
+                if (err) {
+                    deferred.reject(err);
+                    return;
+                }
+                deferred.resolve(res);
+            });
+        })
+        .fail(function(err) {
+            deferred.reject(err);
+        });
 
     return deferred.promise;
 };
