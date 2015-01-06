@@ -19,7 +19,7 @@ var extendAccessToken = function(appId, appSecret, token) {
         if(err) {
             deferred.reject(err);
         } else {
-            deferred.resolve();
+            deferred.resolve(facebookRes);
         }
     });
 
