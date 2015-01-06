@@ -19,8 +19,8 @@ self-hosted Slabs instance. You can register your app at
 [https://developers.facebook.com](https://developers.facebook.com). After the 
 registration set the following environment variables on your host
 
-- FB_GRAPH_SLAB_ID
-- FB_GRAPH_SLAB_SECRET
+- `FB_GRAPH_SLAB_ID`
+- `FB_GRAPH_SLAB_SECRET`
 
 and update the `input/index.html` file as well with your App ID.
 
