@@ -1,0 +1,29 @@
+{
+  "name": "facebook-graph-slab",
+  "version": "1.0.0",
+  "description": "Input slab for querying the facebook graph api",
+  "main": "process/app.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morcmarc/facebook-graph-slab.git"
+  },
+  "keywords": [
+    "slabs.io",
+    "slabs",
+    "slab",
+    "facebook",
+    "graph",
+    "api"
+  ],
+  "author": "Marcell Jusztin <hello@morcmarc.com>",
+  "license": "GNU",
+  "bugs": {
+    "url": "https://github.com/morcmarc/facebook-graph-slab/issues"
+  },
+  "homepage": "https://github.com/morcmarc/facebook-graph-slab",
+  "dependencies": {
+    "q": "^1.1.2",
+    "request": "^2.51.0"
+  }
+}
